@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block body %}
+  <div class="jumbotron">
+    <h1 class="display-4">{{question.title}}</h1>
+    <hr class="my-4">
+    <form action="" method="post">
+      {% csrf_token %}
+    <a href="{% url 'question:update1' question.id %}" class="btn btn-outline-primary btn-lg btn-block"><img src="{{question.image_url1}}" class="rounded mx-auto d-block" style="height: 15rem;" alt="">{{question.choice1}} : {{question.p1}}</a>
+    </form>
+    <form action="" method="post">
+    {% csrf_token %}
+    <a href="{% url 'question:update2' question.id %}" class="btn btn-outline-danger btn-lg btn-block my-3">{{question.choice2}} : {{question.p2}}<img src="{{question.image_url2}}" class="rounded mx-auto d-block" style="height: 15rem;" alt=""></a>
+    </form>
+
+    <hr class="my-4">
+    <div class="row">
+      <div class="col-11">
+        <a href="{% url 'question:edit' question.id %}" class="btn btn-outline-dark">edit</a>
+        <a href="{% url 'question:delete' question.id %}" class="btn btn-outline-dark">delete</a>
+      </div>
+      <div class="col-1">
+        <a href="{% url 'question:random' %}" class="btn btn-danger">Next</a>
+      </div>
+    </div>
+    <hr class="my-4">
+    <form action="{% url 'question:answer_create' question.id %}" method="post">
+      {% csrf_token %}
+      <div class="container">
+        <div class="row">
+          <input class="form-control col-10" type="text" name="content">
+          <input class="btn btn-dark col-2" type="submit">
+        </div>
+      </div>
+    </form>
+    {% if question.an_set.all %}
+      {% for answer in question.an_set.all %}
+        <div class="alert alert-light m-2 row" role="alert">
+            <p class="col-10 mr-4">{{answer.content}}</p>
+            <a class="btn btn-outline-secondary btn-xs " href="{% url 'question:answer_delete' question.id answer.id %}">삭제</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-secondary my-3" role="alert">
+          <p>댓글이 없습니다.</p> 
+      </div>
+    {% endif %}
+  </div>
+
+{% endblock %}
